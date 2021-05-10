@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <title>Level Editor</title>
+
+    <script>
+        $(document).ready(function () {
+            let div;
+            var top = 20
+            var left = 20
+            var id = 0
+            var what
+            var map = []
+            const buttonsNames = [
+                { name: 'zapisz level na serwerze', color: 'black', url: '/save' },
+                { name: 'wczytaj testowy level', color: 'black', url: '/default' },
+                { name: 'wczytaj level z serwera', color: 'black', url: '/read' },
+                { name: 'wall', color: 'green' },
+                { name: 'enemy', color: 'red' },
+                { name: 'treasure', color: 'blue' },
+                { name: 'light', color: 'yellow' },
+                { name: 'delete', color: 'gray' },
+            ]
+            const defaultLevel = [
+                {
+                    "id": 0,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 1,
+                    "type": "wall"
+                },
+                {
+                    "id": 2,
+                    "x": 0,
+                    "y": 0,
+                    "z": 2,
+                    "type": "wall"
+                },
+                {
+                    "id": 3,
+                    "x": 0,
+                    "y": 0,
+                    "z": 3,
+                    "type": "wall"
+                },
+                {
+                    "id": 4,
+                    "x": 0,
+                    "y": 0,
+                    "z": 4,
+                    "type": "wall"
+                },
+                {
+                    "id": 5,
+                    "x": 0,
+                    "y": 0,
+                    "z": 5,
+                    "type": "wall"
+                },
+                {
+                    "id": 6,
+                    "x": 0,
+                    "y": 0,
+                    "z": 6,
+                    "type": "wall"
+                },
+                {
+                    "id": 7,
+                    "x": 0,
+                    "y": 0,
+                    "z": 7,
+                    "type": "wall"
+                },
+                {
+                    "id": 8,
+                    "x": 0,
+                    "y": 0,
+                    "z": 8,
+                    "type": "wall"
+                },
+                {
+                    "id": 9,
+                    "x": 0,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 19,
+                    "x": 1,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 29,
+                    "x": 2,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 39,
+                    "x": 3,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 49,
+                    "x": 4,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 59,
+                    "x": 5,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 69,
+                    "x": 6,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 79,
+                    "x": 7,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 89,
+                    "x": 8,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 99,
+                    "x": 9,
+                    "y": 0,
+                    "z": 9,
+                    "type": "wall"
+                },
+                {
+                    "id": 97,
+                    "x": 9,
+                    "y": 0,
+                    "z": 7,
+                    "type": "wall"
+                },
+                {
+                    "id": 96,
+                    "x": 9,
+                    "y": 0,
+                    "z": 6,
+                    "type": "wall"
+                },
+                {
+                    "id": 95,
+                    "x": 9,
+                    "y": 0,
+                    "z": 5,
+                    "type": "wall"
+                },
+                {
+                    "id": 94,
+                    "x": 9,
+                    "y": 0,
+                    "z": 4,
+                    "type": "wall"
+                },
+                {
+                    "id": 93,
+                    "x": 9,
+                    "y": 0,
+                    "z": 3,
+                    "type": "wall"
+                },
+                {
+                    "id": 92,
+                    "x": 9,
+                    "y": 0,
+                    "z": 2,
+                    "type": "wall"
+                },
+                {
+                    "id": 91,
+                    "x": 9,
+                    "y": 0,
+                    "z": 1,
+                    "type": "wall"
+                },
+                {
+                    "id": 90,
+                    "x": 9,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 80,
+                    "x": 8,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 70,
+                    "x": 7,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 60,
+                    "x": 6,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 50,
+                    "x": 5,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 40,
+                    "x": 4,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 30,
+                    "x": 3,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 20,
+                    "x": 2,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 10,
+                    "x": 1,
+                    "y": 0,
+                    "z": 0,
+                    "type": "wall"
+                },
+                {
+                    "id": 87,
+                    "x": 8,
+                    "y": 0,
+                    "z": 7,
+                    "type": "wall"
+                },
+                {
+                    "id": 77,
+                    "x": 7,
+                    "y": 0,
+                    "z": 7,
+                    "type": "wall"
+                },
+                {
+                    "id": 57,
+                    "x": 5,
+                    "y": 0,
+                    "z": 7,
+                    "type": "wall"
+                },
+                {
+                    "id": 47,
+                    "x": 4,
+                    "y": 0,
+                    "z": 7,
+                    "type": "wall"
+                },
+                {
+                    "id": 37,
+                    "x": 3,
+                    "y": 0,
+                    "z": 7,
+                    "type": "wall"
+                },
+                {
+                    "id": 27,
+                    "x": 2,
+                    "y": 0,
+                    "z": 7,
+                    "type": "wall"
+                },
+                {
+                    "id": 26,
+                    "x": 2,
+                    "y": 0,
+                    "z": 6,
+                    "type": "wall"
+                },
+                {
+                    "id": 24,
+                    "x": 2,
+                    "y": 0,
+                    "z": 4,
+                    "type": "wall"
+                },
+                {
+                    "id": 23,
+                    "x": 2,
+                    "y": 0,
+                    "z": 3,
+                    "type": "wall"
+                },
+                {
+                    "id": 22,
+                    "x": 2,
+                    "y": 0,
+                    "z": 2,
+                    "type": "wall"
+                },
+                {
+                    "id": 32,
+                    "x": 3,
+                    "y": 0,
+                    "z": 2,
+                    "type": "wall"
+                },
+                {
+                    "id": 42,
+                    "x": 4,
+                    "y": 0,
+                    "z": 2,
+                    "type": "wall"
+                },
+                {
+                    "id": 62,
+                    "x": 6,
+                    "y": 0,
+                    "z": 2,
+                    "type": "wall"
+                },
+                {
+                    "id": 73,
+                    "x": 7,
+                    "y": 0,
+                    "z": 3,
+                    "type": "wall"
+                },
+                {
+                    "id": 72,
+                    "x": 7,
+                    "y": 0,
+                    "z": 2,
+                    "type": "wall"
+                },
+                {
+                    "id": 74,
+                    "x": 7,
+                    "y": 0,
+                    "z": 4,
+                    "type": "wall"
+                },
+                {
+                    "id": 76,
+                    "x": 7,
+                    "y": 0,
+                    "z": 6,
+                    "type": "wall"
+                },
+                {
+                    "id": 66,
+                    "x": 6,
+                    "y": 0,
+                    "z": 6,
+                    "type": "wall"
+                },
+                {
+                    "id": 67,
+                    "x": 6,
+                    "y": 0,
+                    "z": 7,
+                    "type": "enemy"
+                },
+                {
+                    "id": 63,
+                    "x": 6,
+                    "y": 0,
+                    "z": 3,
+                    "type": "enemy"
+                },
+                {
+                    "id": 52,
+                    "x": 5,
+                    "y": 0,
+                    "z": 2,
+                    "type": "enemy"
+                },
+                {
+                    "id": 53,
+                    "x": 5,
+                    "y": 0,
+                    "z": 3,
+                    "type": "wall"
+                },
+                {
+                    "id": 33,
+                    "x": 3,
+                    "y": 0,
+                    "z": 3,
+                    "type": "wall"
+                },
+                {
+                    "id": 35,
+                    "x": 3,
+                    "y": 0,
+                    "z": 5,
+                    "type": "wall"
+                },
+                {
+                    "id": 98,
+                    "x": 9,
+                    "y": 0,
+                    "z": 8,
+                    "type": "light"
+                },
+                {
+                    "id": 71,
+                    "x": 7,
+                    "y": 0,
+                    "z": 1,
+                    "type": "light"
+                },
+                {
+                    "id": 11,
+                    "x": 1,
+                    "y": 0,
+                    "z": 1,
+                    "type": "light"
+                },
+                {
+                    "id": 17,
+                    "x": 1,
+                    "y": 0,
+                    "z": 7,
+                    "type": "light"
+                },
+                {
+                    "id": 48,
+                    "x": 4,
+                    "y": 0,
+                    "z": 8,
+                    "type": "light"
+                },
+                {
+                    "id": 46,
+                    "x": 4,
+                    "y": 0,
+                    "z": 6,
+                    "type": "light"
+                },
+                {
+                    "id": 65,
+                    "x": 6,
+                    "y": 0,
+                    "z": 5,
+                    "type": "light"
+                },
+                {
+                    "id": 34,
+                    "x": 3,
+                    "y": 0,
+                    "z": 4,
+                    "type": "enemy"
+                },
+                {
+                    "id": 25,
+                    "x": 2,
+                    "y": 0,
+                    "z": 5,
+                    "type": "enemy"
+                },
+                {
+                    "id": 36,
+                    "x": 3,
+                    "y": 0,
+                    "z": 6,
+                    "type": "enemy"
+                },
+                {
+                    "id": 56,
+                    "x": 5,
+                    "y": 0,
+                    "z": 6,
+                    "type": "treasure"
+                },
+                {
+                    "id": 55,
+                    "x": 5,
+                    "y": 0,
+                    "z": 5,
+                    "type": "wall"
+                }
+            ]
+            $("#list").text(JSON.stringify(map, null, 4))
+
+            for (i = 0; i < 10; i++) {
+                for (j = 0; j < 10; j++) {
+                    div = $("<div>").addClass("field").css("position", "absolute").css("top", top + "px").css("left", left + "px")
+                        .on("click", function () {
+                            if (what === undefined) {
+                                alert("Wybierz element!")
+                            } else {
+                                var type = buttonsNames.find(function (post, index) {
+                                    if (post.name == what)
+                                        return true;
+                                })
+
+                                if (type.color == 'gray') {
+                                    var element = map.findIndex((post, index) => {
+                                        if (post.id == this.id)
+                                            return true;
+                                    })
+
+                                    if (element != -1) {
+                                        map.splice(element, 1)
+                                    }
+
+                                    $(this).css("background-color", "white")
+                                } else {
+                                    var x = (parseInt($(this).css("top").substring(0, $(this).css("top").length - 2)) - 20) / 51
+                                    var z = (parseInt($(this).css("left").substring(0, $(this).css("left").length - 2)) - 20) / 51
+
+                                    var element = {
+                                        id: this.id,
+                                        x: x,
+                                        y: 0,
+                                        z: z,
+                                        type: what
+                                    }
+
+                                    var id = map.findIndex((post, index) => {
+                                        if (post.id == this.id)
+                                            return true;
+                                    })
+
+                                    if (id != -1) {
+                                        map.splice(id, 1)
+                                        map.push(element)
+                                    } else {
+                                        map.push(element)
+                                    }
+
+                                    $(this).css("background-color", type.color)
+                                }
+
+                                $("#list").text(JSON.stringify(map, null, 4))
+                            }
+                        }).attr('id', id);
+                    $("#plane").append(div)
+                    left += 51
+                    id++
+                }
+                top += 51
+                left = 20
+            }
+
+            top = 20
+
+            for (let i = 0; i < buttonsNames.length; i++) {
+                let div = $("<div>").addClass("button").css("position", "absolute").css("top", top + "px")
+                    .text(buttonsNames[i].name).css("background-color", buttonsNames[i].color);
+
+                if (buttonsNames[i].color === 'black') {
+                    div.css("color", 'white')
+                    top += 80
+
+                    div.on("click", function () {
+                        switch (buttonsNames[i].url) {
+                            case '/save':
+                                fetch('http://localhost:5000/save', {
+                                    method: 'POST',
+                                    mode: 'cors',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(map)
+                                })
+                                    .then(response => response.text())
+                                    .then(data => {
+                                    })
+                                break
+                            case '/default':
+                                fetch('http://localhost:5000/save', {
+                                    method: 'POST',
+                                    mode: 'cors',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(defaultLevel)
+                                })
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        map = []
+                                        $("#list").text(JSON.stringify(defaultLevel, null, 4))
+
+                                        defaultLevel.forEach(element => {
+                                            switch (element.type) {
+                                                case 'wall':
+                                                    $('#' + element.id).css('background-color', 'green')
+                                                    break;
+                                                case 'enemy':
+                                                    $('#' + element.id).css('background-color', 'red')
+                                                    break;
+                                                case 'treasure':
+                                                    $('#' + element.id).css('background-color', 'blue')
+                                                    break;
+                                                case 'light':
+                                                    $('#' + element.id).css('background-color', 'yellow')
+                                                    break;
+                                            }
+                                        })
+                                    })
+                                break
+                            case '/read':
+                                fetch('http://localhost:5000/read', {
+                                    method: 'POST',
+                                    mode: 'cors',
+                                    headers: {},
+                                })
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        map.forEach(element => {
+                                            $('#' + element.id).css('background-color', 'white')
+                                        })
+
+                                        var allData = JSON.parse(data)
+                                        map = []
+                                        if (allData != null) {
+                                            for (const [key, value] of Object.entries(allData)) { map.push(value) }
+                                        }
+
+                                        $("#list").text(JSON.stringify(map, null, 4))
+
+                                        map.forEach(element => {
+                                            switch (element.type) {
+                                                case 'wall':
+                                                    $('#' + element.id).css('background-color', 'green')
+                                                    break;
+                                                case 'enemy':
+                                                    $('#' + element.id).css('background-color', 'red')
+                                                    break;
+                                                case 'treasure':
+                                                    $('#' + element.id).css('background-color', 'blue')
+                                                    break;
+                                                case 'light':
+                                                    $('#' + element.id).css('background-color', 'yellow')
+                                                    break;
+                                            }
+                                        })
+                                    })
+                                break
+                        }
+                    })
+                } else {
+                    div.on("click", function () {
+                        $('#' + what).css("border", "none")
+                        $(this).css("border", "4px solid black")
+                        what = buttonsNames[i].name
+                    }).attr('id', buttonsNames[i].name)
+
+                    top += 50
+                }
+
+                $("#buttons").append(div)
+            }
+        })
+    </script>
+
+    <style>
+        .field {
+            border: 1px black solid;
+            height: 50px;
+            width: 50px;
+            cursor: pointer;
+        }
+
+        .button {
+            padding-top: 3px;
+            padding-bottom: 3px;
+            padding-left: 5px;
+            padding-right: 5px;
+            cursor: pointer;
+            width: 200px;
+            font-size: 25px;
+            text-align: center;
+            left: 560px;
+        }
+
+        #list {
+            position: absolute;
+            left: 820px;
+            height: 510px;
+            width: 400px;
+            border: 1px solid black;
+            overflow: auto;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="plane"></div>
+    <div id="buttons"></div>
+    <pre id="list"></pre>
+</body>
+
+</html>
