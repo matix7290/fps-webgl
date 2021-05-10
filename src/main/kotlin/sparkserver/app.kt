@@ -10,22 +10,40 @@ fun main() {
     port(5000)
     staticFileLocation("/public")
 
-    post("/save") { req, res -> save(req, res) }
-    post("/read") { req, res -> read(req, res) }
+    get("/") { _, res -> home(res) }
+    get("/editor") { _, res -> editor(res) }
+    get("/game") { _, res -> game(res) }
+    post("/save") { req, _ -> save(req) }
+    post("/read") { _, res -> read(res) }
 
     println("SparkServer startuje na porcie: 5000")
 
     enableCORS("*", "*", "*")
 }
 
-fun save(request: Request, response: Response) {
+fun home(response: Response) {
+    response.type("text/html")
+    response.redirect("index.html")
+}
+
+fun editor(response: Response) {
+    response.type("text/html")
+    response.redirect("editor.html")
+}
+
+fun game(response: Response) {
+    response.type("text/html")
+    response.redirect("game.html")
+}
+
+fun save(request: Request) {
     val type = object : TypeToken<MutableList<LevelItem>>() {}.type
     val list: MutableList<LevelItem> = Gson().fromJson(request.body(), type)
     level = Level(10, list)
     println(level)
 }
 
-fun read(request: Request, response: Response): String {
+fun read(response: Response): String {
     response.type("application/json")
     return Gson().toJson(level?.getLevel())
 }
@@ -42,7 +60,7 @@ fun enableCORS(origin: String, methods: String, headers: String) {
         }
         "OK"
     }
-    before({ request, response ->
+    before({ _, response ->
         response.header("Access-Control-Allow-Origin", origin)
         response.header("Access-Control-Request-Method", methods)
         response.header("Access-Control-Allow-Headers", headers)
