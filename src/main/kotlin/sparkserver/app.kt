@@ -40,7 +40,7 @@ fun save(request: Request) {
     val type = object : TypeToken<MutableList<LevelItem>>() {}.type
     val list: MutableList<LevelItem> = Gson().fromJson(request.body(), type)
     level = Level(10, list)
-    println(level)
+    println(Gson().toJson(level?.getLevel()))
 }
 
 fun read(response: Response): String {

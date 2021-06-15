@@ -630,7 +630,7 @@
                                 })
 
                                 if (playerPresent) {
-                                    fetch('http://localhost:5000/save', {
+                                    fetch('/save', {
                                         method: 'POST',
                                         mode: 'cors',
                                         headers: { 'Content-Type': 'application/json' },
@@ -642,7 +642,7 @@
                                 }
                                 break
                             case '/default':
-                                fetch('http://localhost:5000/save', {
+                                fetch('/save', {
                                     method: 'POST',
                                     mode: 'cors',
                                     headers: { 'Content-Type': 'application/json' },
@@ -676,7 +676,7 @@
                                     })
                                 break
                             case '/read':
-                                fetch('http://localhost:5000/read', {
+                                fetch('/read', {
                                     method: 'POST',
                                     mode: 'cors',
                                     headers: {},
